@@ -1,0 +1,39 @@
+{
+    "name": "rboschin/laravel-ip-access",
+    "description": "Laravel package for IP-based access control with whitelist/blacklist support",
+    "type": "library",
+    "keywords": [
+        "laravel",
+        "ip",
+        "access control",
+        "whitelist",
+        "blacklist",
+        "security"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Roberto Boschin",
+            "email": "roberto@example.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/support": "^8.0|^9.0|^10.0|^11.0",
+        "illuminate/http": "^8.0|^9.0|^10.0|^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rboschin\\LaravelIpAccess\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Rboschin\\LaravelIpAccess\\IpAccessServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
