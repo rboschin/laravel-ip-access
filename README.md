@@ -2,36 +2,36 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Un package Laravel per controllare l'accesso al sistema tramite whitelist o blacklist di indirizzi IP, configurabile tramite file `.env`.
+A Laravel package to control system access via IP address whitelist or blacklist, configurable through the `.env` file.
 
-## Caratteristiche
+## Features
 
-- ✅ Supporto modalità **whitelist** (solo IP specificati possono accedere)
-- ✅ Supporto modalità **blacklist** (tutti gli IP possono accedere tranne quelli specificati)
-- ✅ Configurazione semplice tramite file `.env`
-- ✅ Supporto per **wildcards** (es. `192.168.1.*`)
-- ✅ Supporto per **notazione CIDR** (es. `192.168.1.0/24`)
-- ✅ Gestione proxy e load balancer (X-Forwarded-For)
-- ✅ Risposta HTTP **403 Forbidden** quando l'accesso è negato
-- ✅ Middleware applicabile globalmente, per gruppo di route o singola route
+- ✅ **Whitelist** mode support (only specified IPs can access)
+- ✅ **Blacklist** mode support (all IPs can access except those specified)
+- ✅ Simple configuration via `.env` file
+- ✅ Support for **wildcards** (e.g., `192.168.1.*`)
+- ✅ Support for **CIDR notation** (e.g., `192.168.1.0/24`)
+- ✅ Proxy and load balancer management (X-Forwarded-For)
+- ✅ **HTTP 403 Forbidden** response when access is denied
+- ✅ Middleware applicable globally, per route group, or single route
 
-## Requisiti
+## Requirements
 
 - PHP >= 7.4
 - Laravel >= 8.0
 
-## Installazione
+## Installation
 
-### 1. Installazione del package
+### 1. Package Installation
 
-Se il package è ospitato su Packagist:
+If the package is hosted on Packagist:
 
 ```bash
 composer require rboschin/laravel-ip-access
 composer update
 ```
 
-Se stai usando un repository locale, aggiungi nel `composer.json` del tuo progetto Laravel:
+If you are using a local repository, add it to your Laravel project's `composer.json`:
 
 ```json
 {
@@ -46,75 +46,75 @@ Se stai usando un repository locale, aggiungi nel `composer.json` del tuo proget
     }
 }
 ```
-oppure
+or
 
 ```bash
 composer config repositories.laravel-ip-access path ../packages/laravel-ip-access
 composer require rboschin/laravel-ip-access:@dev
 ```
 
-Quindi esegui:
+Then run:
 
 ```bash
 composer update
 ```
 
-### 2. Pubblicazione della configurazione (opzionale)
+### 2. Configuration Publication (Optional)
 
-Se desideri personalizzare la configurazione, pubblica il file di config:
+If you wish to customize the configuration, publish the config file:
 
 ```bash
 php artisan vendor:publish --tag=ip-access-config
 ```
 
-Questo creerà il file `config/ip-access.php`.
+This will create the `config/ip-access.php` file.
 
-## Configurazione
+## Configuration
 
-### File .env
+### .env File
 
-Aggiungi le seguenti variabili al tuo file `.env`:
+Add the following variables to your `.env` file:
 
-#### Modalità Whitelist
+#### Whitelist Mode
 
 ```env
-# Modalità: whitelist o blacklist
+# Mode: whitelist or blacklist
 IP_ACCESS_MODE=whitelist
 
-# Lista di IP consentiti (separati da virgola)
+# List of allowed IPs (comma-separated)
 IP_WHITELIST=127.0.0.1,192.168.1.100,10.0.0.*,172.16.0.0/12
 
-# Messaggio personalizzato di accesso negato (opzionale)
-IP_ACCESS_FORBIDDEN_MESSAGE="Accesso negato. Il tuo IP non è autorizzato."
+# Optional custom access denied message
+IP_ACCESS_FORBIDDEN_MESSAGE="Access denied. Your IP is not authorized."
 
-# Trust proxies per X-Forwarded-For (opzionale, default: true)
+# Optional trust proxies for X-Forwarded-For (default: true)
 IP_ACCESS_TRUST_PROXIES=true
 ```
 
-#### Modalità Blacklist
+#### Blacklist Mode
 
 ```env
-# Modalità: whitelist o blacklist
+# Mode: whitelist or blacklist
 IP_ACCESS_MODE=blacklist
 
-# Lista di IP bloccati (separati da virgola)
+# List of blocked IPs (comma-separated)
 IP_BLACKLIST=123.45.67.89,98.76.54.32,192.168.100.*
 
-# Messaggio personalizzato di accesso negato (opzionale)
-IP_ACCESS_FORBIDDEN_MESSAGE="Accesso negato. Il tuo IP è stato bloccato."
+# Optional custom access denied message
+IP_ACCESS_FORBIDDEN_MESSAGE="Access denied. Your IP has been blocked."
 ```
 
-### Formati IP supportati
+### Supported IP Formats
 
-- **IP esatto**: `192.168.1.100`
-- **Wildcard**: `192.168.1.*` (tutti gli IP da 192.168.1.0 a 192.168.1.255)
-- **CIDR**: `192.168.1.0/24` (notazione CIDR standard)
+- **Exact IP**: `192.168.1.100`
+- **Wildcard**: `192.168.1.*` (all IPs from 192.168.1.0 to 192.168.1.255)
+- **CIDR**: `192.168.1.0/24` (Standard CIDR notation)
 
-## Utilizzo
+## Usage
 
-### Applicazione globale del middleware
+### Global Middleware Application
 
-Per applicare il controllo IP a tutte le route, aggiungi il middleware in `app/Http/Kernel.php`:
+To apply IP control to all routes, add the middleware in `app/Http/Kernel.php`:
 
 ```php
 protected $middleware = [
@@ -123,7 +123,7 @@ protected $middleware = [
 ];
 ```
 
-### Applicazione a gruppo di route
+### Route Group Application
 
 ```php
 // routes/web.php
@@ -133,16 +133,16 @@ Route::middleware(['ip.access'])->group(function () {
 });
 ```
 
-### Applicazione a singola route
+### Single Route Application
 
 ```php
 // routes/web.php
 Route::get('/admin', [AdminController::class, 'index'])->middleware('ip.access');
 ```
 
-### Applicazione condizionale
+### Conditional Application
 
-Puoi anche applicare il middleware solo in determinati ambienti:
+You can also apply the middleware only in certain environments:
 
 ```php
 // app/Http/Kernel.php
@@ -152,36 +152,36 @@ protected $middlewareGroups = [
     ],
     
     'admin' => [
-        // middlewares per admin
+        // admin middlewares
         env('APP_ENV') === 'production' ? \Rboschin\LaravelIpAccess\Middleware\CheckIpAccess::class : null,
     ],
 ];
 ```
 
-## Esempi di configurazione
+## Configuration Examples
 
-### Esempio 1: Solo localhost in sviluppo
+### Example 1: Localhost only in development
 
 ```env
 IP_ACCESS_MODE=whitelist
 IP_WHITELIST=127.0.0.1,::1
 ```
 
-### Esempio 2: Bloccare IP specifici
+### Example 2: Blocking specific IPs
 
 ```env
 IP_ACCESS_MODE=blacklist
 IP_BLACKLIST=123.45.67.89,98.76.54.32
 ```
 
-### Esempio 3: Consentire solo rete aziendale
+### Example 3: Allowing only company network
 
 ```env
 IP_ACCESS_MODE=whitelist
 IP_WHITELIST=192.168.1.0/24,10.0.0.0/8
 ```
 
-### Esempio 4: Consentire range con wildcard
+### Example 4: Allowing ranges with wildcard
 
 ```env
 IP_ACCESS_MODE=whitelist
@@ -190,14 +190,14 @@ IP_WHITELIST=192.168.1.*,192.168.2.*,127.0.0.1
 
 ## Testing
 
-Per testare il middleware, puoi simulare diversi IP:
+To test the middleware, you can simulate different IPs:
 
 ```bash
-# Testare con curl specificando l'IP
-curl -H "X-Forwarded-For: 192.168.1.100" http://tuodominio.test/admin
+# Test with curl specifying the IP
+curl -H "X-Forwarded-For: 192.168.1.100" http://yourdomain.test/admin
 ```
 
-Oppure creare un test PHPUnit:
+Or create a PHPUnit test:
 
 ```php
 public function test_ip_whitelist_blocks_unauthorized_ip()
@@ -221,28 +221,28 @@ public function test_ip_whitelist_allows_authorized_ip()
 }
 ```
 
-## Come funziona
+## How it works
 
-1. Il middleware `CheckIpAccess` intercetta ogni richiesta
-2. Ottiene l'IP del client (considerando X-Forwarded-For se configurato)
-3. Controlla se l'IP è consentito o bloccato in base alla modalità configurata
-4. Se l'accesso è negato, restituisce una risposta HTTP 403 Forbidden
-5. Se l'accesso è consentito, passa la richiesta al prossimo middleware
+1. The `CheckIpAccess` middleware intercepts every request
+2. It retrieves the client's IP (considering X-Forwarded-For if configured)
+3. It checks if the IP is allowed or blocked based on the configured mode
+4. If access is denied, it returns an HTTP 403 Forbidden response
+5. If access is allowed, it passes the request to the next middleware
 
-## Sicurezza
+## Security
 
-- Assicurati di configurare correttamente `IP_ACCESS_TRUST_PROXIES` in base al tuo ambiente
-- Se usi un load balancer o proxy, imposta `IP_ACCESS_TRUST_PROXIES=true`
-- Se l'applicazione è direttamente esposta, imposta `IP_ACCESS_TRUST_PROXIES=false` per evitare spoofing
+- Ensure you correctly configure `IP_ACCESS_TRUST_PROXIES` based on your environment
+- If using a load balancer or proxy, set `IP_ACCESS_TRUST_PROXIES=true`
+- If the application is directly exposed, set `IP_ACCESS_TRUST_PROXIES=false` to avoid spoofing
 
-## Licenza
+## License
 
-MIT License. Vedi il file [LICENSE](LICENSE) per maggiori dettagli.
+MIT License. See the [LICENSE](LICENSE) file for more details.
 
-## Autore
+## Author
 
 Roberto Boschin
 
-## Supporto
+## Support
 
-Per bug, richieste di funzionalità o domande, apri una issue su GitHub.
+For bugs, feature requests, or questions, please open an issue on GitHub.
