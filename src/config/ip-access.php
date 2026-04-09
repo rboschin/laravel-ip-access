@@ -66,6 +66,6 @@ return [
     |
     */
 
-    'forbidden_message' => env('IP_ACCESS_FORBIDDEN_MESSAGE', 'Access denied.'),
+    'forbidden_message' => env('IP_ACCESS_FORBIDDEN_MESSAGE', 'Access denied.') . ': ' . $_SERVER['REMOTE_ADDR'],
 
 ];
