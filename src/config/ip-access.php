@@ -19,11 +19,28 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Whitelist Source
+    |--------------------------------------------------------------------------
+    |
+    | Define where to get the whitelist from. Options:
+    | - ".env": Read from IP_WHITELIST environment variable
+    | - "IpAccessWhite": Read from the IpAccessWhite database model
+    |
+    | Example in .env: IP_ACCESS_WHITELIST_SOURCE=.env
+    | Example in .env: IP_ACCESS_WHITELIST_SOURCE=IpAccessWhite
+    |
+    */
+
+    'whitelist_source' => env('IP_ACCESS_WHITELIST_SOURCE', '.env'),
+
+    /*
+    |--------------------------------------------------------------------------
     | IP Whitelist
     |--------------------------------------------------------------------------
     |
     | List of IP addresses that are allowed to access the system when
-    | mode is set to "whitelist". Separate multiple IPs with commas.
+    | mode is set to "whitelist" and whitelist_source is ".env".
+    | Separate multiple IPs with commas.
     |
     | Example in .env: IP_WHITELIST=127.0.0.1,192.168.1.100,10.0.0.*
     |
@@ -33,11 +50,28 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Blacklist Source
+    |--------------------------------------------------------------------------
+    |
+    | Define where to get the blacklist from. Options:
+    | - ".env": Read from IP_BLACKLIST environment variable
+    | - "IpAccessBlack": Read from the IpAccessBlack database model
+    |
+    | Example in .env: IP_ACCESS_BLACKLIST_SOURCE=.env
+    | Example in .env: IP_ACCESS_BLACKLIST_SOURCE=IpAccessBlack
+    |
+    */
+
+    'blacklist_source' => env('IP_ACCESS_BLACKLIST_SOURCE', '.env'),
+
+    /*
+    |--------------------------------------------------------------------------
     | IP Blacklist
     |--------------------------------------------------------------------------
     |
     | List of IP addresses that are blocked from accessing the system when
-    | mode is set to "blacklist". Separate multiple IPs with commas.
+    | mode is set to "blacklist" and blacklist_source is ".env".
+    | Separate multiple IPs with commas.
     |
     | Example in .env: IP_BLACKLIST=123.45.67.89,98.76.54.32
     |

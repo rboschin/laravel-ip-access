@@ -4,6 +4,8 @@ namespace Rboschin\LaravelIpAccess\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Rboschin\LaravelIpAccess\Models\IpAccessWhite;
+use Rboschin\LaravelIpAccess\Models\IpAccessBlack;
 
 class CheckIpAccess
 {
@@ -21,16 +23,54 @@ class CheckIpAccess
 
         // Check access based on mode
         if ($mode === 'whitelist') {
-            if (!$this->isIpAllowed($clientIp, config('ip-access.whitelist', []))) {
+            $whitelist = $this->getWhitelist();
+            if (!$this->isIpAllowed($clientIp, $whitelist)) {
                 return $this->denyAccess();
             }
         } elseif ($mode === 'blacklist') {
-            if ($this->isIpAllowed($clientIp, config('ip-access.blacklist', []))) {
+            $blacklist = $this->getBlacklist();
+            if ($this->isIpAllowed($clientIp, $blacklist)) {
                 return $this->denyAccess();
             }
         }
 
         return $next($request);
+    }
+
+    /**
+     * Get the whitelist from the configured source.
+     *
+     * @return array
+     */
+    protected function getWhitelist(): array
+    {
+        $source = config('ip-access.whitelist_source', '.env');
+        
+        if ($source === '.env') {
+            return config('ip-access.whitelist', []);
+        } elseif ($source === 'IpAccessWhite') {
+            return IpAccessWhite::getActiveIpAddresses();
+        }
+        
+        return [];
+    }
+
+    /**
+     * Get the blacklist from the configured source.
+     *
+     * @return array
+     */
+    protected function getBlacklist(): array
+    {
+        $source = config('ip-access.blacklist_source', '.env');
+        
+        if ($source === '.env') {
+            return config('ip-access.blacklist', []);
+        } elseif ($source === 'IpAccessBlack') {
+            return IpAccessBlack::getActiveIpAddresses();
+        }
+        
+        return [];
     }
 
     /**
